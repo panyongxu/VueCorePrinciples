@@ -29,15 +29,10 @@ class PVue {
                 return value
             },
             set(newVal) {
-                console.log(value);
-                // data[key] = newVal
+                if(newVal === value) {
+                    return
+                }
                 value = newVal
-                console.log(vm.$data);
-                // this.data[key] = newVal;
-                console.log(`${key} 被更新了`);
-                console.log(`newVal: ${newVal}`);
-                console.log(data)
-                
             }
         })
     }
