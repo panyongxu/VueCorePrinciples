@@ -19,26 +19,32 @@
         <div k-html="html"></div>  
     </div>
 
-
+    <script src="./js/Pcompile.js"></script>
     <script src="./js/Pvue.js"></script>
     <script>
-        var pan = new PVue({
+      let pan =  new PVue({
+            el: "#app",
             data: {
-                name: '潘勇旭',
-                list:{
-                    type: 'text',
-                    objList: {
-                        objName : ''
-                    }
-                }
+                name: "I am test.",
+                age: 12,
+                html: "<button>这是一个按钮</button>"
             },
-        })
-        pan.$data.name = 'Mr Pan'
-        pan.$data.name = 'Mr Pans'
-        console.log('修改前data.list.type',pan.$data.list.type);
-        pan.$data.list.type = 'sub'
-        pan.$data.list.objList.objName = 'sad'
-        console.log('修改后data.list.type',pan.$data.list.type);
+            created() {
+                console.log("开始啦");
+                setTimeout(() => {
+                    this.name = "我是测试";
+                }, 1500);
+            },
+            methods: {
+                changeName() {
+                    this.name = "哈喽，开课吧";
+                    this.age = 1;
+                }
+            }
+        });
+        console.log(pan.$data);
+        
+        pan.$data.name = '123'
     </script>
 </body>
 
