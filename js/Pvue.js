@@ -17,23 +17,37 @@ class PVue {
         }
         Object.keys(data).map(key => {
             this.defineReactive(data, key, data[key])
+            // 把数据代理到实例
+            this.proxyData(key)
         })
     }
     // 添加 deﬁneProperty  
-    defineReactive(data, key, value) {
-        console.log(typeof value);
-        
-        var vm = this;
+    defineReactive(data, key, item) {
+        // 循环遍历深层数据
+        this.observer(item)
         Object.defineProperty(data, key, {
             get() {
-                return value
+                return item
             },
             set(newVal) {
-                if(newVal === value) {
+                if(newVal === item) {
                     return
                 }
-                value = newVal
+                item = newVal
+                console.log(`${key}数据被更新了`);
+                
+            }
+        })
+    }
+    proxyData (key) {
+        Object.defineProperty(this, key, {
+            get () {
+                return this.$data[key]
+            },
+            set(newVal) {
+                this.$data[key] = newVal
             }
         })
     }
 }
+
