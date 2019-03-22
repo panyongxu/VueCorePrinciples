@@ -37,17 +37,53 @@ class Compile {
         // 查找所有属性
         const nodeAttrs = node.attributes
         Array.from(nodeAttrs).map((attr,index) => {
-          console.log(attr,index);
+         
+          const attrName = attr.name //属性名
+          const attrValue = attr.value  //属性值
+          console.log(attrName,attrValue);
+          if(this.isAttrNameDirective(attrName)) {
+            const dir = attrName.substring(2)
+            // 根据数据更新
+            this[dir]
+            // this[dir] && this[dir](node, this.$vm, exp);
+          }
+          if(this.isEvent(attrName)) {
+            const event =  attrName.substring(1)
+            // 添加事件
+          }
           
         })
-      } else {
-        
+      }
+      // if(isTextAndInterpolation(node)) {
+      //   this.compileText(node);
+      // }
+      // 递归子节点
+      if (node.childNodes && node.childNodes.length > 0) {
+        this.compile(node);
       }
 
     })
+  }
+  compileText(node) {
+    // console.log(RegExp.$1);
+    this.update(node, this.$vm, RegExp.$1, "text");
   }
   // 元素节点验证
   isElement(node) {
     return node.nodeType == 1
   }
+  // 验证是否属于text节点 且 为 {{}} 格式
+  isTextAndInterpolation(node) {
+    return node.nodeType == 3 && /\{\{(.*)\}\}/.test(node.textContent)
+  }
+  // 属性名验证 p- 开头
+  isAttrNameDirective(attrName) {
+    return attrName.indexOf('p-') == 0
+  }
+  // 验证 @开头
+  isEvent(attrName) {
+    return attrName.indexOf('@') == 0
+  }
+  
+
 }
