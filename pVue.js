@@ -3,8 +3,12 @@ class Pvue {
         this.$options = options
         this.$data = options.data
         this.observe(this.$data)
-        new Wather(this.$data, 'name',null)
-        new Wather(this.$data.fag, 'foo',null)
+
+        // 运行created生命周期
+        this.$options.created && this.$options.created.call(this)
+        new Wather(this.$data, 'name', null)
+        new Wather(this.$data.fag, 'foo', null)
+        new Compile(this.$options.el, this)
     }
     observe(data) {
         if (!data || typeof data !== 'object') {

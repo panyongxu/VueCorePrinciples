@@ -10,8 +10,7 @@ class Compile {
         this.$el.appendChild(this.$fragment)
 
 
-        // 运行created生命周期
-        this.$vm.$options.created && this.$vm.$options.created.call(this.$vm)
+
     }
     node2Fragment(el) {
         const fragment = document.createDocumentFragment()
@@ -53,26 +52,68 @@ class Compile {
                 const dir = attrName.substring(2)
                 this[dir] && this[dir](node, attrValue)
             }
+            if (attrName.includes('@')) {
+                const dir = attrName.substring(1)
+                this[dir] && this[dir](node, attrValue)
+            }
         })
 
     }
     compileText(node) {
         // 拿取到文本标签里的{{xxx}}
 
-        console.log(RegExp.$1); // {{...}}
-        console.log(this.$vm[RegExp.$1]);
-        node.textContent = this.$vm[RegExp.$1]
+        // console.log(RegExp.$1); // {{...}}
+        // console.log(this.$vm[RegExp.$1]);
+        // node.textContent = this.$vm[RegExp.$1]
+        this.update(node, RegExp.$1, 'text')
+    }
+    update(node, key, dir) {
+        const updator = this[dir + 'Updator']
+        updator && updator(node, this.$vm[key])
+
+        new Wather(this.$vm, key, (value) => {
+            updator && updator(node, value)
+        })
+    }
+    eventListener(node, key, type) {
+        const options = this.$vm.$options
+        // 处理this指向问题
+        const eventFn = options.methods[key].bind(this.$vm)
+
+        eventFn && this.addEventListener(node, type, eventFn)
+
+    }
+    textUpdator(node, value) {
+        node.textContent = value
+    }
+
+    htmlUpdator(node, value) {
+        node.innerHTML = value
+    }
+    modelUpdator(node, value) {
+        node.value = value
+
     }
     text(node, key) {
-        node.innerText = this.$vm[key]
+        this.update(node, key, 'text')
     }
+
     html(node, key) {
-        node.innerHTML = this.$vm[key]
+        this.update(node, key, 'html')
     }
     model(node, key) {
-        node.value = this.$vm[key]
-        node.addEventListener('change', () => {
+        this.update(node, key, 'model')
+        node.addEventListener('input', () => {
             this.$vm[key] = node.value
         })
+    }
+    click(node, key) {
+        this.eventListener(node, key, 'click')
+    }
+    dblclick(node, key) {
+        this.eventListener(node, key, 'dblclick')
+    }
+    addEventListener(node, key, fn) {
+        node.addEventListener(key, fn)
     }
 }

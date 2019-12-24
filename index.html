@@ -19,7 +19,10 @@
         <p p-text="name"></p>
         <p>{{age}}</p>
         <input type="text" p-model="name">
-        <button @click="changeName">呵呵</button>
+        <input type="text" p-model="fag">
+        <p>{{fag}}</p>
+        <button @click="changeName">单击事件</button>
+        <button @dblclick="dblclick">双击事件</button>
         <div class="html" p-html="html"></div>
     </div>
     <script src='./compile.js'></script>
@@ -31,9 +34,7 @@
             data: {
                 name: "I am test.",
                 age: 12,
-                fag: {
-                    foo: 'foo'
-                },
+                fag: 'foo',
                 html: '<button>这是一个按钮</button>'
             },
             created() {
@@ -41,16 +42,21 @@
                 setTimeout(() => {
                     this.name = '我是测试'
                 }, 1500)
+                setTimeout(() => {
+                    this.fag.foo = 'fack you'
+                    this.html = '<button>这是2个按钮</button>'
+                }, 2500)
             },
             methods: {
                 changeName() {
                     this.name = '哈喽，开课吧'
                     this.age = 1
+                },
+                dblclick() {
+                    this.fag = ' 我双击了'
                 }
             }
         })
-        new Compile('#app',pan)
-        pan.name = '123'
         pan.fag.foo = 'bar'
     </script>
 </body>
