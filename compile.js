@@ -68,7 +68,7 @@ class Compile {
         this.update(node, RegExp.$1, 'text')
     }
     update(node, key, dir) {
-        const updator = this[dir + 'Updator']
+        const updator = this[dir + 'Updator'].bind(this)
         updator && updator(node, this.$vm[key])
 
         new Wather(this.$vm, key, (value) => {
@@ -79,7 +79,6 @@ class Compile {
         const options = this.$vm.$options
         // 处理this指向问题
         const eventFn = options.methods[key].bind(this.$vm)
-
         eventFn && this.addEventListener(node, type, eventFn)
 
     }
@@ -88,7 +87,11 @@ class Compile {
     }
 
     htmlUpdator(node, value) {
+
         node.innerHTML = value
+
+        this.compile(node)
+
     }
     modelUpdator(node, value) {
         node.value = value
@@ -102,6 +105,7 @@ class Compile {
         this.update(node, key, 'html')
     }
     model(node, key) {
+        
         this.update(node, key, 'model')
         node.addEventListener('input', () => {
             this.$vm[key] = node.value
@@ -115,5 +119,6 @@ class Compile {
     }
     addEventListener(node, key, fn) {
         node.addEventListener(key, fn)
+        console.log("TCL: Compile -> addEventListener -> node", node)
     }
 }

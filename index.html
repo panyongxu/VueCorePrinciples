@@ -35,7 +35,7 @@
                 name: "I am test.",
                 age: 12,
                 fag: 'foo',
-                html: '<button>这是一个按钮</button>'
+                html: '<button @click="sex1">这是一个按钮</button>'
             },
             created() {
                 console.log('开始啦')
@@ -44,7 +44,7 @@
                 }, 1500)
                 setTimeout(() => {
                     this.fag.foo = 'fack you'
-                    this.html = '<button>这是2个按钮</button>'
+                    this.html = '<button @click="sex">这是2个按钮</button>'
                 }, 2500)
             },
             methods: {
@@ -54,6 +54,14 @@
                 },
                 dblclick() {
                     this.fag = ' 我双击了'
+                },
+                sex() {
+                    
+                    console.log('fack you')
+                },
+                sex1() {
+
+                    console.log('fack you1111111')
                 }
             }
         })
