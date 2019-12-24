@@ -6,45 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .html {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <p>{{name}}</p>    
-        <p p-text="name"></p>  
-        <p>{{age}}</p>    
-        <p>{{doubleAge}}</p>  
+        <p>{{name}}</p>
+        <p p-text="name"></p>
+        <p>{{age}}</p>
         <input type="text" p-model="name">
         <button @click="changeName">呵呵</button>
-        <div p-html="html"></div>  
+        <div class="html" p-html="html"></div>
     </div>
+    <script src='./compile.js'></script>
+    <script src='./pVue.js'></script>
 
-    <script src="./js/Pcompile.js"></script>
-    <script src="./js/Pvue.js"></script>
     <script>
-      let pan =  new PVue({
-            el: "#app",
+        const pan = new Pvue({
+            el: '#app',
             data: {
                 name: "I am test.",
                 age: 12,
-                html: "<button>这是一个按钮</button>"
+                fag: {
+                    foo: 'foo'
+                },
+                html: '<button>这是一个按钮</button>'
             },
             created() {
-                console.log("开始啦");
+                console.log('开始啦')
                 setTimeout(() => {
-                    this.name = "我是测试";
-                }, 1500);
+                    this.name = '我是测试'
+                }, 1500)
             },
             methods: {
                 changeName() {
-                    this.name = "哈喽，开课吧";
-                    this.age = 1;
+                    this.name = '哈喽，开课吧'
+                    this.age = 1
                 }
             }
-        });
-        console.log(pan.$data);
-        
-        pan.$data.name = '123'
+        })
+        new Compile('#app',pan)
+        pan.name = '123'
+        pan.fag.foo = 'bar'
     </script>
 </body>
 
